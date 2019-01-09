@@ -1,0 +1,91 @@
+<div class="container">
+  <nav *ngIf="jwt" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" routerLink="" routerLinkActive="active" (click)='goHome()'>ConnectedIn</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+      </ul>
+      <button class="btn btn-sm btn-outline-secondary my-2 my-sm-0" type="button" routerLink="/invitations">Convites</button>
+      <button class="btn btn-sm btn-outline-secondary my-2 my-sm-0" type="button" (click)='signOut()'>Sair</button>
+    </div>
+  </nav>
+  <ng4-loading-spinner [threshold]="0" [zIndex]="9999"></ng4-loading-spinner>
+  <div class="alert alert-success form-group" *ngIf="successTextAlert">
+    <button type="button" class="close" (click)="closeSuccessTextAlert()">×</button>
+    <strong>Sucesso!</strong> {{successTextAlert}}
+  </div>
+  <div class="alert alert-danger form-group" *ngIf="errorTextAlert">
+    <button type="button" class="close" (click)="closeErrorTextAlert()">×</button>
+    <strong>Erro!</strong> {{errorTextAlert}}
+  </div>
+  <div *ngIf="!jwt" class="row" style="padding-top: 10%">
+    <div class="col-md-2 col-sm-12">
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <div class="container">
+        <form [formGroup]="loginForm" (ngSubmit)="signIn(loginForm.value)" novalidate>
+          <div class="row">
+            <h2>Entrar</h2>
+          </div>
+          <div class="row">
+            <input type="text" class="form-control" formControlName="username" placeholder="E-mail"
+                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"/>
+            <small [hidden]="loginForm.get('username').valid" class="text-danger">
+              OBRIGATÓRIO
+            </small>
+          </div>
+          <div class="row">
+            <input type="password" class="form-control" formControlName="password" placeholder="Senha"/>
+            <small [hidden]="loginForm.get('password').valid" class="text-danger">
+              OBRIGATÓRIO
+            </small>
+          </div>
+          <div class="row">
+            <button type="submit" class="btn btn-sm btn-primary" [disabled]="!loginForm.valid" title="Entrar">
+              Entrar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <div class="container">
+        <form [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)" novalidate>
+          <div class="row">
+            <h2>Criar conta</h2>
+          </div>
+          <div class="row">
+            <input type="text" class="form-control" formControlName="email" placeholder="E-mail"
+                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"/>
+            <small [hidden]="registerForm.get('email').valid" class="text-danger">
+              OBRIGATÓRIO
+            </small>
+          </div>
+          <div class="row">
+            <input type="text" class="form-control" formControlName="name" placeholder="Nome"/>
+            <small [hidden]="registerForm.get('name').valid" class="text-danger">
+              OBRIGATÓRIO
+            </small>
+          </div>
+          <div class="row">
+            <input type="password" class="form-control" formControlName="password" placeholder="Senha"/>
+            <small [hidden]="registerForm.get('password').valid" class="text-danger">
+              OBRIGATÓRIO
+            </small>
+          </div>
+          <div class="row">
+            <button type="submit" class="btn btn-sm btn-primary" [disabled]="!registerForm.valid" title="Criar conta">
+              Criar conta
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-12">
+    </div>
+  </div>
+  <router-outlet *ngIf="jwt"></router-outlet>
+</div>

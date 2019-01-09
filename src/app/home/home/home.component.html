@@ -1,0 +1,159 @@
+<div class="container">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-11 form-group padding-right-off">
+        <input [(ngModel)]='name' type="text" class="form-control" minlength="3"
+               placeholder="Campo para buscar pelo nome do usuário"/>
+      </div>
+      <div class="col-sm-1 form-group">
+        <button type="button" class="btn btn-sm btn-primary" routerLink="/users/{{name}}" title="Buscar">
+          Buscar
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="col-sm-12">
+      <div class="alert alert-success form-group" *ngIf="successTextAlert">
+        <button type="button" class="close" (click)="closeSuccessTextAlert()">×</button>
+        <strong>Sucesso!</strong> {{successTextAlert}}
+      </div>
+      <div class="alert alert-danger form-group" *ngIf="errorTextAlert">
+        <button type="button" class="close" (click)="closeErrorTextAlert()">×</button>
+        <strong>Erro!</strong> {{errorTextAlert}}
+      </div>
+      <div class="row" style="padding-top: 5%">
+        <div *ngIf="contactsResponse" class="col-sm-3">
+          <div *ngFor="let contact of contactsResponse">
+            <div class="row">
+              <a routerLink="/contacts-detail/{{contact.email}}">{{contact.name}}</a>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="timelineResponse" class="col-sm-7">
+          <div *ngFor="let post of timelineResponse">
+            <div class="row">
+              <div class="row">
+                <h3>{{post.title}}</h3>
+              </div>
+              <div class="row">
+                <p>{{post.text}}</p>
+              </div>
+              <div class="row">
+                <p>{{post.date}}</p>
+              </div>
+            </div>
+            <hr>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="row">
+            <button class="btn btn-sm btn-success" type="button" (click)="openModel()">
+              <span>Nova Postagem</span>
+            </button>
+          </div>
+          <div class="row">
+            <button class="btn btn-sm btn-default" type="button" (click)="openModelPasswordUpdate()">
+              <span>Alterar Senha</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-smart-modal #myModal identifier="myModal">
+  <div class="container">
+    <div class="col-sm-12">
+      <div class="col-sm-12">
+        <div class="alert alert-success form-group" *ngIf="successTextAlert">
+          <button type="button" class="close" (click)="closeSuccessTextAlert()">×</button>
+          <strong>Sucesso!</strong> {{successTextAlert}}
+        </div>
+        <div class="alert alert-danger form-group" *ngIf="errorTextAlert">
+          <button type="button" class="close" (click)="closeErrorTextAlert()">×</button>
+          <strong>Erro!</strong> {{errorTextAlert}}
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <label>Criar uma postagem</label>
+          </div>
+        </div>
+
+        <form [formGroup]="postForm" (ngSubmit)="newPost(postForm.value)" novalidate>
+          <div class="row justify-content-center align-items-center">
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="title" placeholder="Título"/>
+              <small [hidden]="postForm.get('title').valid" class="text-danger">
+                OBRIGATÓRIO
+              </small>
+            </div>
+            <div class="form-group">
+              <textarea class="form-control" formControlName="text" placeholder="Texto" rows="5" maxlength="200">
+              </textarea>
+              <small [hidden]="postForm.get('text').valid" class="text-danger">
+                OBRIGATÓRIO
+              </small>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="!postForm.valid" title="Postar">
+            Postar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</ngx-smart-modal>
+<ngx-smart-modal #modalPasswordUpdate identifier="modalPasswordUpdate">
+  <div class="container">
+    <div class="col-sm-12">
+      <div class="col-sm-12">
+        <div class="alert alert-success form-group" *ngIf="successTextAlert">
+          <button type="button" class="close" (click)="closeSuccessTextAlert()">×</button>
+          <strong>Sucesso!</strong> {{successTextAlert}}
+        </div>
+        <div class="alert alert-danger form-group" *ngIf="errorTextAlert">
+          <button type="button" class="close" (click)="closeErrorTextAlert()">×</button>
+          <strong>Erro!</strong> {{errorTextAlert}}
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <label>Alterar senha</label>
+          </div>
+        </div>
+
+        <form [formGroup]="passwordUpdateForm" (ngSubmit)="passwordUpdate(passwordUpdateForm.value)" novalidate>
+          <div class="row justify-content-center align-items-center">
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="old_password" placeholder="Senha Antiga"/>
+              <small [hidden]="passwordUpdateForm.get('old_password').valid" class="text-danger">
+                OBRIGATÓRIO
+              </small>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="new_password" placeholder="Nova Senha"/>
+              <small [hidden]="passwordUpdateForm.get('new_password').valid" class="text-danger">
+                OBRIGATÓRIO
+              </small>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="confirm_password" placeholder="Confirme Nova Senha"/>
+              <small [hidden]="passwordUpdateForm.get('confirm_password').valid" class="text-danger">
+                OBRIGATÓRIO
+              </small>
+              <br>
+              <small [hidden]="passwordUpdateForm.get('confirm_password').value === passwordUpdateForm.get('new_password').value" class="text-danger">
+                NOVA SENHA E CONFIRMAÇÃO DE SENHA NÃO CONFEREM
+              </small>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="!passwordUpdateForm.valid" title="Alterar">
+            Alterar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</ngx-smart-modal>
