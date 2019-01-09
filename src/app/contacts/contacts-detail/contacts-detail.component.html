@@ -1,0 +1,64 @@
+<div *ngIf="contactResponse" class="container">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-11 form-group">
+        <!--<img src="/src/user.png"/>-->
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-11 form-group">
+        <h3>{{contactResponse.name}}</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div *ngIf="!contactResponse.myFriend" class="col-sm-2 form-group">
+        <button class="btn btn-sm btn-secondary" type="button" (click)='invite(contactResponse.email)'>
+          <span>Convidar</span>
+        </button>
+      </div>
+      <div *ngIf="contactResponse.myFriend" class="col-sm-2 form-group">
+        <button class="btn btn-sm btn-outline-danger" type="button" (click)='undoFriendship(contactResponse.id, contactResponse.email)'>
+          <span>Desfazer Amizade</span>
+        </button>
+      </div>
+      <div *ngIf="contactResponse.myFriend" class="col-sm-2 form-group">
+        <button class="btn btn-sm btn-danger" type="button" (click)='blockContact(contactResponse.id, contactResponse.email)'>
+          <span>Bloquear Contato</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="col-sm-12">
+      <div class="alert alert-success form-group" *ngIf="successTextAlert">
+        <button type="button" class="close" (click)="closeSuccessTextAlert()">×</button>
+        <strong>Sucesso!</strong> {{successTextAlert}}
+      </div>
+      <div class="alert alert-danger form-group" *ngIf="errorTextAlert">
+        <button type="button" class="close" (click)="closeErrorTextAlert()">×</button>
+        <strong>Erro!</strong> {{errorTextAlert}}
+      </div>
+      <div class="row" style="padding-top: 5%">
+        <div class="col-sm-3">
+          <div *ngFor="let contact of contactResponse.contacts">
+            <div class="row">
+              <a routerLink="/contacts-detail/{{contact.email}}">{{contact.name}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-7">
+          <div *ngFor="let post of contactResponse.posts">
+            <div class="row">
+              <h3>{{post.title}}</h3>
+              <p>{{post.text}}</p>
+              <p>{{post.date}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
