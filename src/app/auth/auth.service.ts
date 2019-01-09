@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Headers, RequestOptions, Response, Http, RequestMethod} from '@angular/http';
 import {Observable, throwError as observableThrowError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {Url} from '../util/url';
+// import {Url} from '../util/url';
 
 @Injectable({
   providedIn: 'root'
