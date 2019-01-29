@@ -34,15 +34,24 @@
       </div>
       <div class="row" style="padding-top: 5%">
         <div *ngIf="contactsResponse" class="col-md-3 col-sm-12">
-          <div *ngFor="let contact of contactsResponse">
+          <div *ngFor="let contact of contactsResponse.items | paginate: { itemsPerPage: 3, currentPage: pContact, totalItems: contactsResponse.total_items }">
             <div class="row">
-              <a routerLink="/contacts-detail/{{contact.email}}">{{contact.name}}</a>
+              <a routerLink="/contacts-detail/{{contact.email}}">
+                {{contact.name}}
+                <span *ngIf="!contact.active" style="color: #ff0000;">DESATIVADO</span>
+              </a>
             </div>
+          </div>
+          <div class="row">
+            <pagination-controls (pageChange)="pageContactChanged($event)"
+                                 previousLabel=""
+                                 nextLabel="">
+            </pagination-controls>
           </div>
         </div>
         <div *ngIf="timelineResponse" class="col-md-7 col-sm-12">
-          <div *ngFor="let post of timelineResponse">
-            <div class="row">
+          <div *ngFor="let post of timelineResponse.items | paginate: { itemsPerPage: 1, currentPage: p, totalItems: timelineResponse.total_items }">
+            <div *ngIf="jwtResponse" class="row">
               <div class="row">
                 <h3>{{post.title}}</h3>
               </div>
@@ -54,16 +63,25 @@
                   <p>{{post.date | date: 'dd/MM/yyyy hh:mm:ss'}}</p>
                 </div>
                 <div class="col-md-5 col-sm-12">
-                  <a routerLink="/contacts-detail/{{post.owner.email}}">{{post.owner.name}}</a>
+                  <a routerLink="/contacts-detail/{{post.owner.email}}">
+                    {{post.owner.name}}
+                    <!--<span *ngIf="!post.owner.active" style="color: #ff0000;">DESATIVADO</span>-->
+                  </a>
                 </div>
-                <div class="col-md-2 col-sm-12">
-                  <button class="btn btn-sm btn-outline-danger" type="button" (click)="openModelPostDelete(post.id)">
+                <div *ngFor="let role of jwtResponse.roles" class="col-md-2 col-sm-12">
+                  <button *ngIf="post.owner.email === emailLogged || role.authority === 'ROLE_ADMIN'" class="btn btn-sm btn-outline-danger" type="button" (click)="openModelPostDelete(post.id)">
                     <span>Excluir</span>
                   </button>
                 </div>
               </div>
             </div>
             <hr>
+          </div>
+          <div class="row justify-content-center align-items-center">
+            <pagination-controls (pageChange)="pageChanged($event)"
+                                 previousLabel="Anterior"
+                                 nextLabel="Próximo">
+            </pagination-controls>
           </div>
         </div>
         <div class="col-md-2 col-sm-12">

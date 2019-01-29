@@ -8,7 +8,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
       </ul>
-      <!--<button class="btn btn-sm btn-outline-secondary my-2 my-sm-0" type="button" routerLink="/invitations">Convites</button>-->
+      <button *ngIf="active" class="btn btn-sm btn-outline-danger my-2 my-sm-0" type="button" (click)='openModalDisable()'>Desativar Conta</button>
+      <button *ngIf="!active" class="btn btn-sm btn-outline-success my-2 my-sm-0" type="button" (click)='activateAccount()'>Ativar Conta</button>
       <button class="btn btn-sm btn-outline-secondary my-2 my-sm-0" type="button" (click)='signOut()'>Sair</button>
     </div>
   </nav>
@@ -89,3 +90,72 @@
   </div>
   <router-outlet *ngIf="jwt"></router-outlet>
 </div>
+<ngx-smart-modal #modalDisable identifier="modalDisable">
+  <div class="container">
+    <div class="col-sm-12">
+      <div class="col-sm-12">
+        <div class="alert alert-success form-group" *ngIf="successTextAlert">
+          <button type="button" class="close" (click)="closeSuccessTextAlert()">×</button>
+          <strong>Sucesso!</strong> {{successTextAlert}}
+        </div>
+        <div class="alert alert-danger form-group" *ngIf="errorTextAlert">
+          <button type="button" class="close" (click)="closeErrorTextAlert()">×</button>
+          <strong>Erro!</strong> {{errorTextAlert}}
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <h2>Deseja realmente desativar sua conta?</h2>
+            <p style="color: orange">Você poderá reativar sua conta novamente quanto quiser!</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <input type="text" class="form-control" [(ngModel)]="justification" placeholder="Justificativa"/>
+            <small [hidden]="justification && justification.length >= 4" class="text-danger">
+              OBRIGATÓRIO
+            </small>
+          </div>
+        </div>
+        <br>
+        <button type="button" class="btn btn-sm btn-outline-danger" title="Desativar" [disabled]="!justification || justification.length < 4" (click)="disableAccount(justification)">
+          Desativar
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" title="Cancelar" (click)="this.ngxSmartModalService.getModal('modalDisable').close();">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</ngx-smart-modal>
+<ngx-smart-modal #modalActive identifier="modalActive">
+  <div class="container">
+    <div class="col-sm-12">
+      <div class="col-sm-12">
+        <div class="alert alert-success form-group" *ngIf="successTextAlert">
+          <button type="button" class="close" (click)="closeSuccessTextAlert()">×</button>
+          <strong>Sucesso!</strong> {{successTextAlert}}
+        </div>
+        <div class="alert alert-danger form-group" *ngIf="errorTextAlert">
+          <button type="button" class="close" (click)="closeErrorTextAlert()">×</button>
+          <strong>Erro!</strong> {{errorTextAlert}}
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <h2>Sua conta está desativada, deseja ativar novamente??</h2>
+          </div>
+        </div>
+
+        <br>
+        <button type="button" class="btn btn-sm btn-success" title="Ativar" (click)="activateAccount()">
+          Ativar
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" title="Cancelar" (click)="this.ngxSmartModalService.getModal('modalActive').close();">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</ngx-smart-modal>

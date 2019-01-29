@@ -12,6 +12,7 @@ import {HomeModule} from './home/home.module';
 import {InvitationsModule} from './invitations/invitations.module';
 import {ContactsModule} from './contacts/contacts.module';
 import {UsersModule} from './users/users.module';
+import {NgxSmartModalModule} from 'ngx-smart-modal';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {UsersModule} from './users/users.module';
     HomeModule,
     InvitationsModule,
     ContactsModule,
-    UsersModule
+    UsersModule,
+    NgxSmartModalModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

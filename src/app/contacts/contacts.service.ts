@@ -90,4 +90,43 @@ export class ContactsService {
       catchError((error: any) => observableThrowError(error.json().error || 'Server error')));
   }
 
+  disableAccount(justification) {
+    const headers = new Headers(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': window.localStorage.getItem('jwt')
+      }
+    );
+    const options = new RequestOptions({headers: headers});
+    return this.http.put(Url.ADDRESS + Url.DISABLE, justification, options).pipe(
+      map((res: Response) => res.json().body),
+      catchError((error: any) => observableThrowError(error.json().error || 'Server error')));
+  }
+
+  activeAccount() {
+    const headers = new Headers(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': window.localStorage.getItem('jwt')
+      }
+    );
+    const options = new RequestOptions({headers: headers});
+    return this.http.put(Url.ADDRESS + Url.ACTIVE, null, options).pipe(
+      map((res: Response) => res.json().body),
+      catchError((error: any) => observableThrowError(error.json().error || 'Server error')));
+  }
+
+  isActivated() {
+    const headers = new Headers(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': window.localStorage.getItem('jwt')
+      }
+    );
+    const options = new RequestOptions({headers: headers});
+    return this.http.get(Url.ADDRESS + Url.USERS + '/activated', options).pipe(
+      map((res: Response) => res.json().body),
+      catchError((error: any) => observableThrowError(error.json().error || 'Server error')));
+  }
+
 }

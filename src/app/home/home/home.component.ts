@@ -1,14 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
-import {ContactResponse} from '../../response/contact-response';
 import {ContactsService} from '../../contacts/contacts.service';
 import {TimelineService} from '../../timeline/timeline.service';
-import {PostResponse} from '../../response/post-response';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgxSmartModalService} from 'ngx-smart-modal';
 import {UsersService} from '../../users/users.service';
 import {InvitationResponse} from '../../response/invitation-response';
 import {InvitationsService} from '../../invitations/invitations.service';
+import {JwtResponse} from '../../response/jwt-response';
+import * as JWT from 'jwt-decode';
+import {TimelineResponse} from '../../response/timeline-response';
+import {ContactsResponse} from '../../response/contacts-response';
 
 @Component({
   selector: 'app-home',
@@ -17,13 +19,16 @@ import {InvitationsService} from '../../invitations/invitations.service';
 })
 export class HomeComponent implements OnInit {
 
+  jwt: string;
+  jwtResponse: JwtResponse;
+
   emailLogged: string;
 
   successTextAlert: string;
   errorTextAlert: string;
 
-  contactsResponse: ContactResponse[];
-  timelineResponse: PostResponse[];
+  contactsResponse: ContactsResponse;
+  timelineResponse: TimelineResponse;
   invitationsReceived: InvitationResponse[];
   invitationsSent: InvitationResponse[];
 
@@ -33,6 +38,8 @@ export class HomeComponent implements OnInit {
 
   name: string;
   invitationId: string;
+  p: number;
+  pContact: number;
 
   constructor(private spinner: Ng4LoadingSpinnerService,
               private contactsService: ContactsService,
@@ -44,6 +51,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.emailLogged = window.localStorage.getItem('emailLogged');
+    this.jwt = window.localStorage.getItem('jwt');
+    if (this.jwt) {
+      this.jwtResponse = JWT(this.jwt);
+    }
     this.postForm = new FormGroup({
       title: new FormControl('', Validators.required),
       text: new FormControl('', Validators.required)
@@ -60,6 +71,16 @@ export class HomeComponent implements OnInit {
     this.findAllPosts();
     this.findAllInvitationsReceived();
     this.findAllInvitationsSent();
+    this.p = 1;
+    this.pContact = 1;
+  }
+
+  pageChanged(event) {
+    this.p = event;
+  }
+
+  pageContactChanged(event) {
+    this.pContact = event;
   }
 
   findAllContacts() {

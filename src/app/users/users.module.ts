@@ -1,14 +1,17 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { UsersRoutingModule } from './users-routing.module';
-import { UsersComponent } from './users/users.component';
+import {UsersRoutingModule} from './users-routing.module';
+import {UsersComponent} from './users/users.component';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   imports: [
     CommonModule,
-    UsersRoutingModule
+    UsersRoutingModule,
+    NgxPaginationModule
   ],
   declarations: [UsersComponent]
 })
-export class UsersModule { }
+export class UsersModule {
+}

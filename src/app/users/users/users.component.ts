@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {UsersService} from '../users.service';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
-import {ContactResponse} from '../../response/contact-response';
 import {ContactsService} from '../../contacts/contacts.service';
 import {JwtResponse} from '../../response/jwt-response';
 import * as JWT from 'jwt-decode';
+import {ContactsResponse} from '../../response/contacts-response';
 
 @Component({
   selector: 'app-users',
@@ -19,10 +19,12 @@ export class UsersComponent implements OnInit {
   successTextAlert: string;
   errorTextAlert: string;
 
-  contactsResponse: ContactResponse[];
+  contactsResponse: ContactsResponse;
 
   jwt: string;
   jwtResponse: JwtResponse;
+
+  p: number;
 
   constructor(private route: ActivatedRoute,
               private spinner: Ng4LoadingSpinnerService,
@@ -41,6 +43,11 @@ export class UsersComponent implements OnInit {
     if (this.name) {
       this.searchByName(this.name);
     }
+    this.p = 1;
+  }
+
+  pageChanged(event) {
+    this.p = event;
   }
 
   searchByName(name) {

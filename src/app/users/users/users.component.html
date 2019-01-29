@@ -11,10 +11,10 @@
       </div>
       <div class="row" style="padding-top: 5%;">
         <div *ngIf="contactsResponse" class="col-sm-12">
-          <div *ngIf="!contactsResponse.length > 0" class="row">
+          <div *ngIf="contactsResponse.total_items === 0" class="row">
             <h3>Nenhum contato encontrado!</h3>
           </div>
-          <div *ngFor="let user of contactsResponse">
+          <div *ngFor="let user of contactsResponse.items | paginate: { itemsPerPage: 3, currentPage: p, totalItems: contactsResponse.total_items }">
             <div class="row">
               <div class="col-sm-4">
                 <h4>{{user.name}}</h4>
@@ -37,6 +37,12 @@
               </div>
             </div>
             <hr>
+          </div>
+          <div class="row justify-content-center align-items-center">
+            <pagination-controls (pageChange)="pageChanged($event)"
+                                 previousLabel="Anterior"
+                                 nextLabel="Próximo">
+            </pagination-controls>
           </div>
         </div>
       </div>

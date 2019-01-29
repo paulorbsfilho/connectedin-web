@@ -10,6 +10,7 @@ export class ContactResponse {
   roles: any[];
   myFriend: boolean;
   enabled: boolean;
+  active: boolean;
   blocked: boolean;
 
 }

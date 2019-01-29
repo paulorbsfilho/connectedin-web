@@ -11,6 +11,8 @@ export enum Url {
   INVITE = '/users/invite',
   POSTS = '/users/posts',
   PASSWORD = '/users/password',
-  ADMIN = '/users/admin'
+  ADMIN = '/users/admin',
+  DISABLE = '/users/disable',
+  ACTIVE = '/users/active'
 
 }
