@@ -25,7 +25,7 @@ export class InvitationsComponent implements OnInit {
 
   findAll() {
     this.spinner.show();
-    this.invitationsService.findAll().subscribe(
+    this.invitationsService.findAllReceived().subscribe(
       response => {
         this.invitationsResponse = response;
         this.spinner.hide();

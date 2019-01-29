@@ -38,4 +38,17 @@ export class UsersService {
       catchError((error: any) => observableThrowError(error.json().error || 'Server error')));
   }
 
+  deletePost(id) {
+    const headers = new Headers(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': window.localStorage.getItem('jwt')
+      }
+    );
+    const options = new RequestOptions({headers: headers});
+    return this.http.delete(Url.ADDRESS + Url.POSTS + '?id=' + id, options).pipe(
+      map((res: Response) => res.json().body),
+      catchError((error: any) => observableThrowError(error.json().error || 'Server error')));
+  }
+
 }

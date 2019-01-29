@@ -11,6 +11,8 @@ import {ContactResponse} from '../../response/contact-response';
 })
 export class ContactsDetailComponent implements OnInit {
 
+  emailLogged: string;
+
   email: string;
 
   successTextAlert: string;
@@ -24,6 +26,7 @@ export class ContactsDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.emailLogged = window.localStorage.getItem('emailLogged');
     this.route.params.subscribe(params => {
       this.email = params['email'];
     });

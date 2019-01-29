@@ -85,6 +85,21 @@ export class UsersComponent implements OnInit {
     );
   }
 
+  blockContact(id, name) {
+    this.spinner.show();
+    this.contactsService.blockContact(id).subscribe(
+      response => {
+        this.searchByName(name);
+        this.successTextAlert = response;
+        this.spinner.hide();
+      },
+      error => {
+        this.errorTextAlert = error;
+        this.spinner.hide();
+      }
+    );
+  }
+
   closeSuccessTextAlert() {
     this.successTextAlert = '';
   }

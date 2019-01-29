@@ -6,6 +6,9 @@ import {TimelineService} from '../../timeline/timeline.service';
 import {PostResponse} from '../../response/post-response';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgxSmartModalService} from 'ngx-smart-modal';
+import {UsersService} from '../../users/users.service';
+import {InvitationResponse} from '../../response/invitation-response';
+import {InvitationsService} from '../../invitations/invitations.service';
 
 @Component({
   selector: 'app-home',
@@ -14,24 +17,33 @@ import {NgxSmartModalService} from 'ngx-smart-modal';
 })
 export class HomeComponent implements OnInit {
 
+  emailLogged: string;
+
   successTextAlert: string;
   errorTextAlert: string;
 
   contactsResponse: ContactResponse[];
   timelineResponse: PostResponse[];
+  invitationsReceived: InvitationResponse[];
+  invitationsSent: InvitationResponse[];
 
   postForm: FormGroup;
   passwordUpdateForm: FormGroup;
+  postDeleteForm: FormGroup;
 
   name: string;
+  invitationId: string;
 
   constructor(private spinner: Ng4LoadingSpinnerService,
               private contactsService: ContactsService,
               private timelineService: TimelineService,
-              public ngxSmartModalService: NgxSmartModalService) {
+              public ngxSmartModalService: NgxSmartModalService,
+              private userService: UsersService,
+              private invitationsService: InvitationsService) {
   }
 
   ngOnInit() {
+    this.emailLogged = window.localStorage.getItem('emailLogged');
     this.postForm = new FormGroup({
       title: new FormControl('', Validators.required),
       text: new FormControl('', Validators.required)
@@ -41,8 +53,13 @@ export class HomeComponent implements OnInit {
       new_password: new FormControl('', Validators.required),
       confirm_password: new FormControl('', Validators.required)
     });
+    this.postDeleteForm = new FormGroup({
+      id: new FormControl('', Validators.required)
+    });
     this.findAllContacts();
     this.findAllPosts();
+    this.findAllInvitationsReceived();
+    this.findAllInvitationsSent();
   }
 
   findAllContacts() {
@@ -64,6 +81,34 @@ export class HomeComponent implements OnInit {
     this.timelineService.findAllPosts().subscribe(
       timelineResponse => {
         this.timelineResponse = timelineResponse;
+        this.spinner.hide();
+      },
+      error => {
+        this.errorTextAlert = error;
+        this.spinner.hide();
+      }
+    );
+  }
+
+  findAllInvitationsReceived() {
+    this.spinner.show();
+    this.invitationsService.findAllReceived().subscribe(
+      response => {
+        this.invitationsReceived = response;
+        this.spinner.hide();
+      },
+      error => {
+        this.errorTextAlert = error;
+        this.spinner.hide();
+      }
+    );
+  }
+
+  findAllInvitationsSent() {
+    this.spinner.show();
+    this.invitationsService.findAllSent().subscribe(
+      response => {
+        this.invitationsSent = response;
         this.spinner.hide();
       },
       error => {
@@ -106,12 +151,71 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  deletePost(post) {
+    this.spinner.show();
+    this.userService.deletePost(post.id).subscribe(
+      response => {
+        this.successTextAlert = response;
+        this.spinner.hide();
+      },
+      error => {
+        this.errorTextAlert = error;
+        this.spinner.hide();
+      }
+    );
+  }
+
   openModel() {
+    this.postForm = new FormGroup({
+      title: new FormControl('', Validators.required),
+      text: new FormControl('', Validators.required)
+    });
     this.ngxSmartModalService.getModal('myModal').open();
   }
 
   openModelPasswordUpdate() {
+    this.passwordUpdateForm = new FormGroup({
+      old_password: new FormControl('', Validators.required),
+      new_password: new FormControl('', Validators.required),
+      confirm_password: new FormControl('', Validators.required)
+    });
     this.ngxSmartModalService.getModal('modalPasswordUpdate').open();
+  }
+
+  openModelPostDelete(id) {
+    this.postDeleteForm = new FormGroup({
+      id: new FormControl(id, Validators.required)
+    });
+    this.ngxSmartModalService.getModal('modalPostDelete').open();
+  }
+
+  openInvitationModal(id) {
+    this.invitationId = id;
+    this.ngxSmartModalService.getModal('modalInvitation').open();
+  }
+
+  changeStatus(id, status) {
+    this.spinner.show();
+    this.invitationsService.changeStatus(id, status).subscribe(
+      response => {
+        this.findAllInvitationsReceived();
+        this.findAllContacts();
+        this.successTextAlert = status === 'accepted' ? 'Convite aceito' : 'Convite rejeitado';
+        this.spinner.hide();
+      },
+      error => {
+        this.errorTextAlert = error;
+        this.spinner.hide();
+      }
+    );
+  }
+
+  accepted(id, status) {
+    this.changeStatus(id, status);
+  }
+
+  rejected(id, status) {
+    this.changeStatus(id, status);
   }
 
   closeSuccessTextAlert() {

@@ -2,15 +2,18 @@
   <div *ngFor="let role of jwtResponse.roles" class="col-sm-12">
     <div class="col-sm-12">
       <div class="alert alert-success form-group" *ngIf="successTextAlert">
-        <button type="button" class="close" (click)="closeSuccessTextAlert()">×</button>
+        <button type="button" class="close" (click)="closeSuccessTextAlert    ()">×</button>
         <strong>Sucesso!</strong> {{successTextAlert}}
       </div>
       <div class="alert alert-danger form-group" *ngIf="errorTextAlert">
         <button type="button" class="close" (click)="closeErrorTextAlert()">×</button>
         <strong>Erro!</strong> {{errorTextAlert}}
       </div>
-      <div class="row" style="padding-top: 5%">
+      <div class="row" style="padding-top: 5%;">
         <div *ngIf="contactsResponse" class="col-sm-12">
+          <div *ngIf="!contactsResponse.length > 0" class="row">
+            <h3>Nenhum contato encontrado!</h3>
+          </div>
           <div *ngFor="let user of contactsResponse">
             <div class="row">
               <div class="col-sm-4">
@@ -20,12 +23,20 @@
                 <span>{{user.email}}</span>
               </div>
               <div class="col-sm-2">
-                <a href="#" *ngIf="!user.myFriend" (click)="invite(user.email)">Convidar</a>
+                <button *ngIf="!user.myFriend" class="btn btn-sm btn-secondary" type="button" (click)='invite(user.email)'>
+                  <span>Convidar</span>
+                </button>
+                <button *ngIf="user.myFriend && !user.blocked" class="btn btn-sm btn-danger" type="button" (click)='blockContact(user.id, user.name)'>
+                  <span>Bloquear Contato</span>
+                </button>
               </div>
               <div *ngIf="role.authority === 'ROLE_ADMIN'" class="col-sm-2">
-                <a href="#" (click)="adminNew(user.email)">Tornar Super Usuário</a>
+                <button class="btn btn-sm btn-outline-secondary" type="button" (click)='adminNew(user.email)'>
+                  <span>Super Usuário</span>
+                </button>
               </div>
             </div>
+            <hr>
           </div>
         </div>
       </div>

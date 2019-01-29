@@ -6,7 +6,7 @@ export enum Url {
   USERS = '/users',
   CONTACTS = '/users/contacts',
   TIMELINE = '/users/timeline',
-  INVITATIONS = '/users/invitations/received',
+  INVITATIONS = '/users/invitations',
   DETAIL = '/users/detail',
   INVITE = '/users/invite',
   POSTS = '/users/posts',

@@ -62,6 +62,7 @@ export class AppComponent implements OnInit {
         window.localStorage.setItem('jwt', jwt);
         this.jwt = jwt;
         this.jwtResponse = JWT(this.jwt);
+        window.localStorage.setItem('emailLogged', this.jwtResponse.sub);
         this.goHome();
         this.spinner.hide();
       },
@@ -74,6 +75,7 @@ export class AppComponent implements OnInit {
 
   signOut() {
     window.localStorage.removeItem('jwt');
+    window.localStorage.removeItem('emailLogged');
     this.jwt = '';
   }
 

@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="row">
-      <div *ngIf="!contactResponse.myFriend" class="col-sm-2 form-group">
+      <div *ngIf="!contactResponse.myFriend && contactResponse.email !== emailLogged" class="col-sm-2 form-group">
         <button class="btn btn-sm btn-secondary" type="button" (click)='invite(contactResponse.email)'>
           <span>Convidar</span>
         </button>

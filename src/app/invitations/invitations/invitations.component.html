@@ -17,15 +17,20 @@
                 <h4>{{invitation.sender.name}}</h4>
               </div>
               <div class="col-sm-4">
-                <span>{{invitation.date}}</span>
+                <span>{{invitation.date | date: 'dd/MM/yyyy hh:mm:ss'}}</span>
               </div>
               <div class="col-sm-2">
-                <a href="#" *ngIf="invitation.status === 'pending'" (click)="accepted(invitation.id, 'accepted')">Aceitar</a>
+                <button *ngIf="invitation.status === 'pending'" class="btn btn-sm btn-success" type="button" (click)="accepted(invitation.id, 'accepted')">
+                  <span>Aceitar</span>
+                </button>
               </div>
               <div class="col-sm-2">
-                <a href="#" *ngIf="invitation.status === 'pending'" (click)="rejected(invitation.id, 'rejected')">Rejeitar</a>
+                <button *ngIf="invitation.status === 'pending'" class="btn btn-sm btn-outline-danger" type="button" (click)="accepted(invitation.id, 'rejected')">
+                  <span>Rejeitar</span>
+                </button>
               </div>
             </div>
+            <hr>
           </div>
         </div>
       </div>
