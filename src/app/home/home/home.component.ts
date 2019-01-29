@@ -41,6 +41,9 @@ export class HomeComponent implements OnInit {
   p: number;
   pContact: number;
 
+  selectedFiles: FileList;
+  currentFileUpload: File;
+
   constructor(private spinner: Ng4LoadingSpinnerService,
               private contactsService: ContactsService,
               private timelineService: TimelineService,
@@ -73,6 +76,10 @@ export class HomeComponent implements OnInit {
     this.findAllInvitationsSent();
     this.p = 1;
     this.pContact = 1;
+  }
+
+  selectFile(event) {
+    this.selectedFiles = event.target.files;
   }
 
   pageChanged(event) {
@@ -139,12 +146,30 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  newPost(post) {
+  async newPost(post) {
     this.spinner.show();
-    this.timelineService.newPost(post).subscribe(
+    await this.timelineService.newPost(post).subscribe(
       response => {
         this.findAllPosts();
         this.successTextAlert = 'Postagem criada';
+        this.upload(response.id);
+        this.spinner.hide();
+      },
+      error => {
+        this.errorTextAlert = error;
+        this.spinner.hide();
+      }
+    );
+  }
+
+  upload(id) {
+    this.spinner.show();
+    this.currentFileUpload = this.selectedFiles.item(0);
+    this.timelineService.pushFileToStorage(id, this.currentFileUpload).subscribe(
+      response => {
+        this.findAllPosts();
+        this.successTextAlert = 'Upload feito';
+        this.selectedFiles = undefined;
         this.spinner.hide();
       },
       error => {
